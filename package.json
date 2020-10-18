@@ -1,0 +1,48 @@
+{
+  "name": "react_typescript_webpack",
+  "version": "1.0.0",
+  "description": "Build UI that scales",
+  "scripts": {
+    "start": "webpack-dev-server --mode=development",
+    "build": "rimraf dist && webpack --mode=production",
+    "lint": "eslint --ext .ts,.tsx .",
+    "format": "prettier --write --check \"!.cache\" \"!dist\" ."
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "webpack"
+  ],
+  "author": "longtp17@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "@types/react-router-dom": "^5.1.6",
+    "axios": "^0.20.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-hook-form": "^6.9.2",
+    "react-router-dom": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.24",
+    "@types/react-dom": "^16.0.5",
+    "@types/webpack": "4.1.4",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "compression-webpack-plugin": "^6.0.3",
+    "css-loader": "^5.0.0",
+    "eslint": "^7.11.0",
+    "eslint-plugin-react": "^7.21.4",
+    "eslint-plugin-react-hooks": "^4.1.2",
+    "file-loader": "^6.1.1",
+    "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^1.0.0",
+    "prettier": "^2.1.2",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.4.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
