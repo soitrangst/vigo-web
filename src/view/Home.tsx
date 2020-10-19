@@ -3,16 +3,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import Seat, { Reservation } from "./Seat"
 
 
-import M from "materialize-css"
 
-import {ToastCustomWarning} from "../../service/infastructural/toast"
+import { WarningToast } from ".././service/infastructural/toast"
 
-import { StorageService } from '../../service/storageService';
-import { Constant, Url } from '../../service/infastructural/constant';
+import { StorageService } from '.././service/storageService';
+import { Constant, Url } from '.././service/infastructural/constant';
 import { useHistory } from 'react-router-dom';
+import { Collapse, Input, Select } from 'antd';
+import { useDispatch } from 'react-redux';
+import { booking } from '../redux/actions';
 
 
-const storageSerivce = new StorageService()
+
+const { Panel } = Collapse;
+const { Option } = Select;
 
 interface User {
   name: string,
@@ -28,11 +32,9 @@ export interface Booking extends User {
 
 function Home(): JSX.Element {
 
-  const history= useHistory()
+  const history = useHistory()
+  const dispatch = useDispatch()
 
-  const selectMovieRef = useRef(null)
-  const selectDateRef = useRef(null)
-  const collapsible = useRef(null)
 
   const [movie, setMovie] = useState<string>('')
   const [date, setDate] = useState<string>('')
@@ -42,9 +44,6 @@ function Home(): JSX.Element {
   const [totalPrice, setTotalPrice] = useState<number>()
 
   useEffect(() => {
-    M.Collapsible.init(collapsible.current, { accordion: false })
-    M.FormSelect.init(selectMovieRef.current,)
-    M.FormSelect.init(selectDateRef.current)
   }, [])
 
   const updateTotalPrice = (e: Array<Reservation>): void => {
@@ -70,61 +69,58 @@ function Home(): JSX.Element {
     const element: HTMLElement = e.target.parentElement
     if (name === "date") {
       if (!movie) {
-        ToastCustomWarning('Vui lòng chọn film')
+        WarningToast('Vui lòng chọn film')
       } else {
         element.classList.remove('disable')
       }
     }
     if (name === "seat") {
       if (!date) {
-        ToastCustomWarning('Vui lòng chọn ngày')
+        WarningToast('Vui lòng chọn ngày')
       } else {
         element.classList.remove('disable')
       }
     }
   }
 
-  const submit = ():void => {
-    if(validate()){
-      const dataform:Booking = {
+  const submit = (): void => {
+    if (validate()) {
+      const dataform: Booking = {
         movie,
         date,
         seats,
-        name:name.trim(),
-        email:email.trim(),
+        name: name.trim(),
+        email: email.trim(),
         totalPrice
       }
-      console.log();
-      
-      storageSerivce.set(Constant.bookingData.isData,true)
-      storageSerivce.set(Constant.bookingData.data,dataform)
+      dispatch(booking(dataform))
       history.push(Url.receive)
     }
   }
 
-  const validate = ():boolean => {
+  const validate = (): boolean => {
     const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
-    if(!emailRegex.test(email)){
-      
-      ToastCustomWarning('Vui lòng nhập đúng email')
+    if (!emailRegex.test(email)) {
+
+      WarningToast('Vui lòng nhập đúng email')
       return false
     }
-    if(name.trim().length < 1){
-      ToastCustomWarning('Vui lòng nhập tên')
+    if (name.trim().length < 1) {
+      WarningToast('Vui lòng nhập tên')
       return false
     }
-    if(!movie){
-      
-      ToastCustomWarning('Vui lòng chọn film')
+    if (!movie) {
+
+      WarningToast('Vui lòng chọn film')
       return false
     }
-    if(!date){
-      ToastCustomWarning('Vui lòng chọn ngày xem')
+    if (!date) {
+      WarningToast('Vui lòng chọn ngày xem')
       return false
     }
-    if(!totalPrice){
-      ToastCustomWarning("Vui lòng chọn ghế")
+    if (!totalPrice) {
+      WarningToast("Vui lòng chọn ghế")
       return false
     }
     return true
@@ -134,61 +130,57 @@ function Home(): JSX.Element {
     <div className="container">
 
       <div className="form__user">
-        <form className="col s12">
-          <div className="row">
 
-            <div className="input-field col s12">
-              <input  id="name" type="text"
-                onChange={(e) => setName(e.target.value)} />
-              <label htmlFor="name">Your name</label>
-            </div>
+        <div className="input-field">
+          <label htmlFor="name">Your name</label>
+          <Input id="name" type="text"
+            autoComplete="false"
+            onChange={(e) => setName(e.target.value)} />
+        </div>
 
-            <div className="input-field col s12">
-              <input  id="email" type="text"
-                onChange={(e) => setEmail(e.target.value)} />
-              <label htmlFor="email">Your email</label>
-            </div>
+        <div className="input-field">
+          <label htmlFor="email">Your email</label>
+          <Input id="email" type="text"
+            autoComplete="false"
+            onChange={(e) => setEmail(e.target.value)} />
+        </div>
 
-          </div>
-        </form>
       </div>
 
-      <ul ref={collapsible} className="collapsible">
-        <li>
-          <div className="collapsible-header"><i className="material-icons">filter_drama</i>Sellect Movie</div>
-          <div className="collapsible-body">
-            <div className="input-field col s12">
-              <select ref={selectMovieRef} onChange={(e) => setMovie(e.target.value)} >
-                <option  >Choose your option</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
-              </select>
-              <label>Sellect your movie</label>
-            </div>
-          </div>
-        </li>
-        <li className='disable' onClick={(e) => alertSelect(e, "date")}>
-          <div className="collapsible-header "><i className="material-icons">place</i>Sellect date </div>
-          <div className="collapsible-body">
-            <div className="input-field col s12">
-              <select ref={selectDateRef} onChange={(e) => setDate(e.target.value)}>
-                <option  >Choose your option</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
-              </select>
-              <label>Sellect your date</label>
-            </div>
-          </div>
-        </li>
-        <li className='disable' onClick={(e) => alertSelect(e, "seat")}>
-          <div className="collapsible-header"><i className="material-icons">whatshot</i>Seats</div>
-          <div className="collapsible-body">
-            <Seat updateSeat={updateSeat} />
-          </div>
-        </li>
-      </ul>
+      <Collapse accordion>
+
+        <Panel header="Sellect Movie" key="1">
+          <Select placeholder="Sellect your movie"
+            className="panel-select"
+            onChange={(value: string) => setMovie(value)} >
+            <Option value="1">Option 1</Option>
+            <Option value="2">Option 2</Option>
+            <Option value="3">Option 3</Option>
+          </Select>
+        </Panel>
+
+        <Panel
+          header={<div onClick={(e) => alertSelect(e, "date")}>Sellect date</div>} key="2"
+          disabled={!movie}
+        >
+          <Select
+            className="panel-select"
+            placeholder="Sellect your date"
+            onChange={(value: string) => setDate(value)}
+          >
+            <Option value="option1">Option 1</Option>
+            <Option value="option12">Option 2</Option>
+            <Option value="option13">Option 3</Option>
+          </Select>
+        </Panel>
+
+        <Panel header="Seats" key="3"
+          extra={<div onClick={(e) => alertSelect(e, "seat")}></div>}
+          disabled={!date}
+        >
+          <Seat updateSeat={updateSeat} />
+        </Panel>
+      </Collapse>
 
       <div className="bottom-content">
         <div className="product-details">
@@ -257,7 +249,7 @@ function Home(): JSX.Element {
           </table>
         </div>
         <div className="booking">
-          <button className="btn" onClick={()=>submit()}>Book now</button>
+          <button className="btn" onClick={() => submit()}>Book now</button>
         </div>
       </div>
     </div>

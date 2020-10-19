@@ -1,10 +1,16 @@
+import { message } from 'antd';
 
-import M from "materialize-css"
+const SuccessToast = (text:string,config:any = null) => {
+    message.success(text);
+};
+const WarningToast = (text:string,config:any = null) => {
+    message.warning(text);
+};
+const ErrorToast = (text:string,config:any = null) => {
+    message.error(text);
+};
+const LoadingToast = () => {
+    message.loading({ content: 'Loading...' })
+};
 
-export function ToastCustomWarning(content: string, options: any = null): void {
-    M.toast({ html: content,classes:'orange darken-4', ...options })
-}
-
-export function ToastCustomSuccess(content: string, options: any = null): void {
-    M.toast({ html: content,classes:'green darken-2', ...options })
-}
+export {SuccessToast,ErrorToast,LoadingToast,WarningToast}

@@ -5,6 +5,18 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const VENDOR_LIBS = [
+    'react',
+    "react-dom",
+    "react-redux",
+    "react-router-dom",
+    "redux",
+    "redux-saga",
+    "axios",
+    "react-hook-form",
+    "antd"
+]
+
 module.exports = (env, options) => {
 
     const isDevelopment = options.mode !== "production";
@@ -12,7 +24,8 @@ module.exports = (env, options) => {
     return {
         mode: isDevelopment ? "development" : "production",
         entry: {
-            app: path.join(__dirname, 'src', 'index.tsx')
+            app: path.join(__dirname, 'src', 'index.tsx'),
+            vendor: VENDOR_LIBS
         },
         output: {
             filename: isDevelopment ? "[name].js" : "[name].[contenthash:8].js",
@@ -30,34 +43,38 @@ module.exports = (env, options) => {
                     exclude: '/node_modules/'
                 },
                 {
-                    test: /\.css$/,
+                    test: /\.s[ac]ss$/i,
                     use: [
+                        // Creates `style` nodes from JS strings
                         'style-loader',
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                importLoaders: 1,
-                                modules: true
-                            }
-                        }
+                        // Translates CSS into CommonJS
+                        'css-loader',
+                        // Compiles Sass to CSS
+                        'sass-loader',
                     ],
-                    include: /\.module\.css$/
-                }, 
+                },
+                {
+                    test: /\.less$/,
+                    use: [{
+                        loader: 'style-loader',
+                    }, {
+                        loader: 'css-loader', // translates CSS into CommonJS
+                    }, {
+                        loader: 'less-loader', // compiles Less to CSS
+                    }]
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                },
                 {
                     test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.woff2$|\.eot$|\.ttf$/,
-                    loader: 'file-loader' ,
+                    loader: 'file-loader',
                     options: {
                         name: 'assets/[name].[ext]',
                     }
                 },
-                {
-                    test: /\.css$/,
-                    use: [
-                        MiniCssExtractPlugin.loader,
-                        'css-loader'
-                    ],
-                    exclude: /\.module\.css$/
-                }
+
             ],
         },
         devtool: isDevelopment
@@ -68,15 +85,9 @@ module.exports = (env, options) => {
                 name: "runtime",
             },
             splitChunks: {
-                chunks: "all",
-                cacheGroups: {
-                    vendor: {
-                        name: "vendors",
-                        test: /[\\/]node_modules[\\/]/,
-                    },
-                },
-                name: false,
-            },
+                chunks: 'all',
+                name: false
+              }
         },
         performance: {
             hints: false,

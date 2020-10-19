@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-
+import { useSelector } from 'react-redux';
 //libs
 
 //libs
-import { Constant } from '../../service/infastructural/constant';
-import { ToastCustomSuccess } from '../../service/infastructural/toast';
-import { StorageService } from '../../service/storageService';
+import { Constant } from '.././service/infastructural/constant';
+import { SuccessToast } from '.././service/infastructural/toast';
+import { StorageService } from '.././service/storageService';
+
+
 import Empty from './Empty';
 import { Booking } from './Home';
-
 import { Reservation } from './Seat';
 import TicketScreen from './Tickets';
 
@@ -24,28 +25,37 @@ export interface Tickets {
 
 const Detail: React.FC = () => {
 
-    const data: Booking = storageService.get(Constant.bookingData.isData)
+    const dataStore: Booking | Boolean = storageService.get(Constant.bookingData.isData)
+    const { bookingReducer } = useSelector((state): any => state)
 
     const [tickets, setTickets] = useState<Array<Tickets>>([])
 
 
-    useEffect(() => {
-        if (data) {
+    const updateDate = (data:Booking) => {
+        const ticketList: Array<Tickets> = data.seats.map((e) => {
+            return {
+                movie: data.movie,
+                date: data.date,
+                seats: { ...e }
+            }
+        })
+        setTickets(ticketList)
+    }
 
-            const ticketList: Array<Tickets> = data.seats.map((e) => {
-                return {
-                    movie: data.movie,
-                    date: data.date,
-                    seats: { ...e }
-                }
-            })
-            console.log(ticketList);
-            setTickets(ticketList)
+    useEffect(() => {
+        const data: Booking = bookingReducer.response
+        if (data) {
+            storageService.set(Constant.bookingData.isData, true)
+            storageService.set(Constant.bookingData.data, data)
+            updateDate(data)
+        }
+        if (dataStore) {
+            updateDate(dataStore as Booking)
         }
     }, [])
 
     const complete = () => {
-        ToastCustomSuccess("Saved")
+        SuccessToast("Saved")
     }
 
 

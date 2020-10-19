@@ -1,6 +1,6 @@
 import React from 'react';
-import { ToastCustomWarning } from '../../service/infastructural/toast';
 
+import {WarningToast } from "../service/infastructural/toast"
 
 
 export interface Reservation {
@@ -37,7 +37,7 @@ class Seat extends React.Component<PropType, StateType> {
             const indexSeat = seats.length - 1
             
             if(indexSeat > -1 && seats[indexSeat].zone != zone ){
-                ToastCustomWarning('Vui lòng chọn cùng loại ghế')
+                WarningToast('Vui lòng chọn cùng loại ghế')
                 return
             }
 

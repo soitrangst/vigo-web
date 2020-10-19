@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 
-import Home from "./view/screens/Home";
-import Detail from "./view/screens/Detail"
 import { Url } from './service/infastructural/constant';
-import Empty from './view/screens/Empty';
-import Admin from './view/screens/Admin';
+import Detail from './view/Detail';
+import Empty from './view/Empty';
+import Home from './view/Home';
 
 
 
@@ -16,12 +15,11 @@ const Router: React.FC = () => {
       <Switch>
 
         <Route exact path="/" >
-          <Admin/>
-        {/* <Home /> */}
+          <Home/>
         </Route>
 
         <Route path={Url.receive}>
-          <Detail />
+          <Detail/>
         </Route>
 
         <Route path="/401">
