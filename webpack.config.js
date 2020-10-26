@@ -38,9 +38,11 @@ module.exports = (env, options) => {
         module: {
             rules: [
                 {
-                    test: /\.tsx?$/,
-                    use: 'ts-loader',
-                    exclude: '/node_modules/'
+                    test: /\.(ts|js)x?$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'babel-loader'
+                    },
                 },
                 {
                     test: /\.s[ac]ss$/i,
