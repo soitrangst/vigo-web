@@ -7,6 +7,12 @@
       "noImplicitAny": true,
       "allowSyntheticDefaultImports": true,
       "moduleResolution": "node",
+      "baseUrl": ".",
+      "paths": {
+        "@view/*": ["./src/view/*"],
+        "@redux/*": ["./src/redux/*"],
+        "@assets/*": ["./src/assets/*"]
+      }
     }
   }
   

@@ -8,12 +8,11 @@
         "@babel/proposal-class-properties",
         "@babel/proposal-object-rest-spread",
         ["module-resolver", {
-            "root": ["./src"],
+          "root": ["./"],
             "alias": {
-              "test": "./test",
-              "underscore": "lodash",
-              "assets": "./src/assets",
-              "view": "./src/view"
+              "@view": "./src/view",
+              "@redux": "./src/redux",
+              "@assets": "./src/assets",
             }
           }]
     ]

@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import { Tickets } from './Detail';
 
 
 
-import barCode from ".././assets/images/barcode.png";
-import iconMoive from ".././assets/images/icon-moive.png"
+import barCode from "@assets/images/barcode.png";
+import iconMoive from "@assets/images/icon-moive.png"
 import { Col, Row } from 'antd';
 
 type PropsType = {

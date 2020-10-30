@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
+import * as React from "react"
+import { Route, Switch, BrowserRouter, Redirect } from "react-router-dom"
 
-import { Url } from './service/infastructural/constant';
-import Detail from './view/Detail';
-import Empty from './view/Empty';
-import Home from './view/Home';
+import { Url } from "./service/infastructural/constant"
+import Detail from "@view/Detail"
+import Empty from "@view/Empty"
+import Home from "@view/Home"
 
 
 
